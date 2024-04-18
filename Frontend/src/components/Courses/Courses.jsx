@@ -1,10 +1,26 @@
 import Footer from "../Footer";
 import Navbar from "../Navbar";
-import booksList from "../../../public/booksList";
 import Cards from "../Cards";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Courses = () => {
+  const [books, setBooks] = useState([]);
+
+  const getBooks = async () => {
+    try {
+      const response = await axios.get("http://localhost:4001/book");
+      setBooks(response.data);
+    } catch (e) {
+      console.log("Error from API", e);
+    }
+  };
+
+  useEffect(() => {
+    getBooks();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -28,7 +44,7 @@ const Courses = () => {
           </Link>
         </div>
         <div className="mt-12 grid grid-cols-1 md:grid-cols-4">
-          {booksList.map((item) => (
+          {books.map((item) => (
             <Cards key={item.id} item={item} />
           ))}
         </div>
